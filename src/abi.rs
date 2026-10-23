@@ -344,4 +344,3 @@ pub mod syscall {
     /// Returned by [`PING`].
     pub const PONG: u64 = 0x5A49_5256; // "ZIRV"
 }
-

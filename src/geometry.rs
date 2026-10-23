@@ -122,10 +122,7 @@ impl Rect {
     }
 
     pub const fn contains(self, point: Point) -> bool {
-        point.x >= self.x
-            && point.y >= self.y
-            && point.x < self.right()
-            && point.y < self.bottom()
+        point.x >= self.x && point.y >= self.y && point.x < self.right() && point.y < self.bottom()
     }
 
     pub const fn contains_rect(self, other: Rect) -> bool {

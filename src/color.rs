@@ -59,10 +59,7 @@ impl Rgba {
 
     /// Pack into `0xAARRGGBB`.
     pub const fn to_argb(self) -> u32 {
-        ((self.a as u32) << 24)
-            | ((self.r as u32) << 16)
-            | ((self.g as u32) << 8)
-            | (self.b as u32)
+        ((self.a as u32) << 24) | ((self.r as u32) << 16) | ((self.g as u32) << 8) | (self.b as u32)
     }
 
     /// Pack into `0xRRGGBB`, discarding alpha.
@@ -85,8 +82,7 @@ impl Rgba {
     pub fn lerp(self, other: Self, t: f32) -> Self {
         let t = t.clamp(0.0, 1.0);
         let mix = |a: u8, b: u8| -> u8 {
-            crate::math::round(a as f32 + (b as f32 - a as f32) * t)
-                .clamp(0.0, 255.0) as u8
+            crate::math::round(a as f32 + (b as f32 - a as f32) * t).clamp(0.0, 255.0) as u8
         };
         Self::new(
             mix(self.r, other.r),
@@ -174,10 +170,8 @@ pub const fn blend_argb(src: u32, dst: u32) -> u32 {
         return src;
     }
     let inv = 255 - a;
-    let rb = (((src & 0x00ff00ff) * a + (dst & 0x00ff00ff) * inv + 0x00800080) >> 8)
-        & 0x00ff00ff;
-    let g = (((src & 0x0000ff00) * a + (dst & 0x0000ff00) * inv + 0x00008000) >> 8)
-        & 0x0000ff00;
+    let rb = (((src & 0x00ff00ff) * a + (dst & 0x00ff00ff) * inv + 0x00800080) >> 8) & 0x00ff00ff;
+    let g = (((src & 0x0000ff00) * a + (dst & 0x0000ff00) * inv + 0x00008000) >> 8) & 0x0000ff00;
     rb | g
 }
 
@@ -216,7 +210,11 @@ pub fn sample_gradient(stops: &[GradientStop], t: f32) -> Rgba {
 
 impl fmt::Display for Rgba {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "#{:02x}{:02x}{:02x}{:02x}", self.r, self.g, self.b, self.a)
+        write!(
+            f,
+            "#{:02x}{:02x}{:02x}{:02x}",
+            self.r, self.g, self.b, self.a
+        )
     }
 }
 

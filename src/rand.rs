@@ -89,6 +89,7 @@ impl XorShift32 {
     }
 
     #[inline]
+    #[allow(clippy::should_implement_trait)]
     pub fn next(&mut self) -> u32 {
         let mut x = self.state;
         x ^= x << 13;

@@ -45,11 +45,7 @@ impl<T, const N: usize> RingBuffer<T, N> {
 
     #[inline]
     fn physical_index(&self, logical: usize) -> usize {
-        if N == 0 {
-            0
-        } else {
-            (self.head + logical) % N
-        }
+        if N == 0 { 0 } else { (self.head + logical) % N }
     }
 
     /// Push a value, returning it back if the buffer is full.
@@ -189,7 +185,10 @@ mod tests {
         assert_eq!(ring.push(4), Err(4));
         assert_eq!(ring.pop(), Some(1));
         assert!(ring.push(4).is_ok());
-        assert_eq!(ring.iter().copied().collect::<alloc::vec::Vec<_>>(), alloc::vec![2, 3, 4]);
+        assert_eq!(
+            ring.iter().copied().collect::<alloc::vec::Vec<_>>(),
+            alloc::vec![2, 3, 4]
+        );
     }
 
     #[test]

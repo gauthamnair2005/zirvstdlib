@@ -29,7 +29,9 @@ impl Path {
     }
 
     pub fn components(&self) -> impl Iterator<Item = &str> {
-        self.0.split('/').filter(|part| !part.is_empty() && *part != ".")
+        self.0
+            .split('/')
+            .filter(|part| !part.is_empty() && *part != ".")
     }
 
     pub fn file_name(&self) -> Option<&str> {
@@ -127,6 +129,7 @@ impl PathBuf {
         Self(String::new())
     }
 
+    #[allow(clippy::should_implement_trait)]
     pub fn from_str(value: &str) -> Self {
         Self(value.to_string())
     }
@@ -222,7 +225,10 @@ mod tests {
         assert_eq!(path.file_name(), Some("notes.txt"));
         assert_eq!(path.extension(), Some("txt"));
         assert_eq!(path.parent().unwrap().as_str(), "/home/zirvium");
-        assert_eq!(path.components().collect::<alloc::vec::Vec<_>>(), alloc::vec!["home", "zirvium", "notes.txt"]);
+        assert_eq!(
+            path.components().collect::<alloc::vec::Vec<_>>(),
+            alloc::vec!["home", "zirvium", "notes.txt"]
+        );
     }
 
     #[test]

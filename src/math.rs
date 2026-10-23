@@ -196,11 +196,7 @@ pub fn rem_euclid(value: f32, modulus: f32) -> f32 {
 /// Absolute value without a libm.
 #[inline]
 pub fn abs(value: f32) -> f32 {
-    if value < 0.0 {
-        -value
-    } else {
-        value
-    }
+    if value < 0.0 { -value } else { value }
 }
 
 /// A fast sine approximation.  Input is radians; the result is in `-1..=1`.
@@ -209,11 +205,7 @@ pub fn sin(mut x: f32) -> f32 {
     x = rem_euclid(x + PI, TAU) - PI;
     // Bhaskara-like polynomial with a correction factor; max error ~0.001.
     let x2 = x * x;
-    x * (1.0
-        - x2 / 6.0
-        + x2 * x2 / 120.0
-        - x2 * x2 * x2 / 5040.0
-        + x2 * x2 * x2 * x2 / 362880.0)
+    x * (1.0 - x2 / 6.0 + x2 * x2 / 120.0 - x2 * x2 * x2 / 5040.0 + x2 * x2 * x2 * x2 / 362880.0)
 }
 
 /// A fast cosine approximation.

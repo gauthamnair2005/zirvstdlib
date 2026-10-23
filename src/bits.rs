@@ -192,18 +192,21 @@ impl<const N: usize> BitSet<N> {
     }
 
     pub fn iter_set(&self) -> impl Iterator<Item = usize> + '_ {
-        self.words.iter().enumerate().flat_map(|(word_index, word)| {
-            let mut value = *word;
-            core::iter::from_fn(move || {
-                if value == 0 {
-                    None
-                } else {
-                    let bit = value.trailing_zeros() as usize;
-                    value &= value - 1;
-                    Some(word_index * 64 + bit)
-                }
+        self.words
+            .iter()
+            .enumerate()
+            .flat_map(|(word_index, word)| {
+                let mut value = *word;
+                core::iter::from_fn(move || {
+                    if value == 0 {
+                        None
+                    } else {
+                        let bit = value.trailing_zeros() as usize;
+                        value &= value - 1;
+                        Some(word_index * 64 + bit)
+                    }
+                })
             })
-        })
     }
 }
 
