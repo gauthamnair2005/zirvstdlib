@@ -1,0 +1,15 @@
+[package]
+name = "zirvstdlib"
+version = "2.0.0"
+edition = "2024"
+rust-version = "1.85"
+license = "GPL-3.0-or-later"
+authors = ["Gautham Nair"]
+description = "Zirvium standard library: 64-bit, no_std, memory-safe primitives for the Zirvium v2 operating system"
+repository = "https://github.com/gauthamnair2005/zirvstdlib"
+
+[dependencies]
+
+[features]
+default = []
+alloc = []
