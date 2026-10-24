@@ -213,17 +213,20 @@ pub fn cos(x: f32) -> f32 {
     sin(x + PI * 0.5)
 }
 
-/// A Newton-iterated square root that does not depend on a libm.
+/// A square root.  On x86-64 the hardware `sqrtss` instruction is used: it is
+/// a single instruction rather than the five divisions of a Newton iteration,
+/// which matters because the anti-aliasing path calls this for every edge
+/// pixel.
 pub fn sqrt(value: f32) -> f32 {
     if value <= 0.0 {
         return 0.0;
     }
-    // Initial guess via the bit-level exponent trick.
-    let mut x = f32::from_bits((value.to_bits() >> 1) + 0x1fc0_0000);
-    for _ in 0..5 {
-        x = 0.5 * (x + value / x);
+    // SAFETY: `sqrtss` is available on every x86-64 CPU (SSE2 baseline) and
+    // does not touch memory.
+    unsafe {
+        let input = core::arch::x86_64::_mm_set_ss(value);
+        core::arch::x86_64::_mm_cvtss_f32(core::arch::x86_64::_mm_sqrt_ss(input))
     }
-    x
 }
 
 pub fn distance(x0: f32, y0: f32, x1: f32, y1: f32) -> f32 {
@@ -252,7 +255,13 @@ pub fn rounded_rect_sdf(
     let qy = (py - cy).abs() - (half_h - radius);
     let qx0 = qx.max(0.0);
     let qy0 = qy.max(0.0);
-    let outside = sqrt(qx0 * qx0 + qy0 * qy0);
+    // On the straight sides one of these is zero, so the square root is not
+    // needed.  Border strokes and most shadow pixels take this path.
+    let outside = if qx0 == 0.0 || qy0 == 0.0 {
+        0.0
+    } else {
+        sqrt(qx0 * qx0 + qy0 * qy0)
+    };
     outside + qx.max(qy).min(0.0) - radius
 }
 
